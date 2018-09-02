@@ -1,0 +1,67 @@
+﻿@model GigHub.Core.ViewModels.GigsViewModel
+@{
+    ViewBag.Title = "Home Page";
+}
+@using (Html.BeginForm("Search", "Gigs"))
+{
+    <div class="form-group pull-right">
+        <div id="searchGigs" class="input-group">
+            @Html.TextBoxFor(m => m.SearchTerm, new { @class = "form-control", placeholder = "Search by Artist, Genre or Location..." })
+            <span class="input-group-addon">
+                <i class="glyphicon glyphicon-search"></i>
+            </span>
+        </div>
+    </div>
+}
+<h2>@Model.Heading</h2>
+<hr/>
+<ul id="gigs" class="gigs voffset3">
+    @foreach (var gig in Model.UpcomingGigs)
+    {
+        <li>
+            <div class="date">
+                <div class="month">
+                    @gig.DateTime.ToString("MMM")
+                </div>
+                <div class="day">
+                    @gig.DateTime.ToString("d ")
+                </div>
+                <div class="time">
+                    @gig.DateTime.ToString("h:mm tt")
+                </div>
+            </div>
+            <div class="details">
+                <a href="@Url.Action("Details", "Gigs", new { id = gig.Id })">
+                    <span class="artist">
+                        @gig.Artist.Name
+                    </span>
+                </a>
+                <span class="genre">
+                    (@gig.Genre.Name)
+                </span>
+                &nbsp;&nbsp;
+                @if (gig.IsCanceled)
+                {
+                    <span class="label label-warning situational">Canceled</span>
+                }
+                @if (Model.ShowActions && !gig.IsCanceled)
+                {
+                    <button data-gig-id="@gig.Id"
+                            class="btn situational
+                    @(Model.Attendances.Contains(gig.Id) ? "btn-info" : "btn-default")
+                    btn-sm js-toggle-attendance">
+                        @(Model.Attendances.Contains(gig.Id) ? "Going" : "Going?")
+                    </button>
+                }
+            </div>
+        </li>
+    }
+</ul>
+@section scripts
+{
+    <script>
+        $(document).ready(function () {
+            GigsController.init("#gigs");
+        });
+    </script>
+}

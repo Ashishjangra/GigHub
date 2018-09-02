@@ -1,0 +1,10 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/GigHub/bin
+/$tf
+/.vs/GigHub/v15
+/BuildProcessTemplates
+/GigHub/App_Data
+/packages

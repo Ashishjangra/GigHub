@@ -1,0 +1,61 @@
+﻿@using Microsoft.AspNet.Identity
+@model GigHub.Core.ViewModels.GigDetailsViewModel
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h3>
+    @Model.Gig.Artist.Name
+    &nbsp;&nbsp;
+    @if (User.Identity.IsAuthenticated)
+    {
+        if (Model.IsFollowing)
+        {
+            <button class="btn btn-info js-toggle-follow"
+                    data-user-id="@Model.Gig.ArtistId">
+                Following
+            </button>
+        }
+        else
+        {
+            <button class="btn btn-default js-toggle-follow"
+                    data-user-id="@Model.Gig.ArtistId">
+                Follow
+            </button>
+        }
+    }
+</h3>
+<p>
+    <b>Genre:&nbsp;</b> @Model.Gig.Genre.Name <br />
+    <b>Venue:&nbsp;</b> @Model.Gig.Venue <br />
+    <b>Date:&nbsp;</b> @Model.Gig.DateTime.ToString("MMMM d") <br />
+    <b>Time:&nbsp;</b> @Model.Gig.DateTime.ToString("h:mm tt")
+</p>
+@if (User.Identity.IsAuthenticated)
+{
+    if (User.Identity.GetUserId() == Model.Gig.ArtistId)
+    {
+        <p>You are performing at this event. </p>
+    }
+    else if (Model.IsAttending)
+    {
+        <p>You are attending this event. </p>
+    }
+    else
+    {
+        <p>You are not attending this event. </p>
+    }
+}
+@section scripts
+{
+    <script>
+        $(document).ready(function () {
+            GigDetailsController.init();
+        });
+    </script>
+}
+
+
+
+
